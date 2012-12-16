@@ -1,0 +1,16 @@
+.suo
+.csproj.user
+obj
+NonCommercialLicense.sln
+NonCommercialLicense.suo
+/ChatExample
+/DedicatedServer
+/Game
+/Game_Mac
+/GameCommon
+/GameEntities
+/GameEntities.Editor
+/MonoRuntimeLauncher
+/MyNativeDLL
+/WinFormsAppExample
+/WPFAppExample
