@@ -293,7 +293,7 @@ namespace Orvid.UI
 			{
 				if (mEnableMultilineInput)
 				{
-
+					//f.GetWordWrapLines(renderer, txt, 
 				}
 				else
 				{
@@ -408,8 +408,20 @@ namespace Orvid.UI
 					}
 					break;
 				case EKeys.Up:
-				case EKeys.Down:
+					if (mEnableMultilineInput)
+					{
 
+					}
+					if (!mShiftDown)
+						mSelecting = false;
+					break;
+				case EKeys.Down:
+					if (mEnableMultilineInput)
+					{
+
+					}
+					if (!mShiftDown)
+						mSelecting = false;
 					break;
 
 				case EKeys.Home:
