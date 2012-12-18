@@ -35,31 +35,68 @@ namespace Orvid.UI
 					//first point
 					Vec2 nextPoint = points[nPoint + 1];
 
-					float angle = MathFunctions.ATan(nextPoint.Y - point.Y, nextPoint.X - point.X);
-					Vec2 positionOffset = new Vec2(MathFunctions.Cos(angle), MathFunctions.Sin(angle)) * halfThickness;
-					angle += MathFunctions.PI * .5f;
-					Vec2 thicknessOffset = new Vec2(MathFunctions.Cos(angle), MathFunctions.Sin(angle)) * halfThickness;
-
-					Vec2 p1 = point + positionOffset + thicknessOffset;
-					Vec2 p2 = point + positionOffset - thicknessOffset;
-					vertices[writeIndex++] = new GuiRenderer.TriangleVertex(p1, color);
-					vertices[writeIndex++] = new GuiRenderer.TriangleVertex(p2, color);
+					float xDif = nextPoint.X - point.X;
+					float yDif = nextPoint.Y - point.Y;
+					if (Math.Abs(yDif) > Math.Abs(xDif))
+					{
+						if (yDif > 0)
+						{
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X - halfThickness.X, point.Y), color);
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X + halfThickness.X, point.Y), color);
+						}
+						else
+						{
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X + halfThickness.X, point.Y), color);
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X - halfThickness.X, point.Y), color);
+						}
+					}
+					else
+					{
+						if (xDif < 0)
+						{
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X, point.Y - halfThickness.Y), color);
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X, point.Y + halfThickness.Y), color);
+						}
+						else
+						{
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X, point.Y + halfThickness.Y), color);
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X, point.Y - halfThickness.Y), color);
+						}
+					}
 				}
 				else if (nPoint == points.Count - 1)
 				{
 					//last point
 
 					Vec2 previousPoint = points[nPoint - 1];
-
-					float angle = MathFunctions.ATan(point.Y - previousPoint.Y, point.X - previousPoint.X);
-					Vec2 positionOffset = new Vec2(MathFunctions.Cos(angle), MathFunctions.Sin(angle)) * halfThickness;
-					angle += MathFunctions.PI * .5f;
-					Vec2 thicknessOffset = new Vec2(MathFunctions.Cos(angle), MathFunctions.Sin(angle)) * halfThickness;
-
-					Vec2 p1 = point + positionOffset + thicknessOffset;
-					Vec2 p2 = point + positionOffset - thicknessOffset;
-					vertices[writeIndex++] = new GuiRenderer.TriangleVertex(p1, color);
-					vertices[writeIndex++] = new GuiRenderer.TriangleVertex(p2, color);
+					float xDif = point.X - previousPoint.X;
+					float yDif = point.Y - previousPoint.Y;
+					if (Math.Abs(yDif) > Math.Abs(xDif))
+					{
+						if (yDif > 0)
+						{
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X - halfThickness.X, point.Y), color);
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X + halfThickness.X, point.Y), color);
+						}
+						else
+						{
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X + halfThickness.X, point.Y), color);
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X - halfThickness.X, point.Y), color);
+						}
+					}
+					else
+					{
+						if (xDif < 0)
+						{
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X, point.Y - halfThickness.Y), color);
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X, point.Y + halfThickness.Y), color);
+						}
+						else
+						{
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X, point.Y + halfThickness.Y), color);
+							vertices[writeIndex++] = new GuiRenderer.TriangleVertex(new Vec2(point.X, point.Y - halfThickness.Y), color);
+						}
+					}
 				}
 				else
 				{
@@ -163,41 +200,27 @@ namespace Orvid.UI
 			return GenerateTriangles(points, thicknessXY, color);
 		}
 
-		//public static void Test(GuiRenderer renderer)
-		//{
-		//    //draw green uniform cubic curve
-		//    {
-		//        UniformCubicSpline curve = new UniformCubicSpline();
-		//        curve.AddValue(0, new Vec3(.1f, .1f, 0));
-		//        curve.AddValue(1, new Vec3(.5f, .07f, 0));
-		//        curve.AddValue(2, new Vec3(.9f, .2f, 0));
-		//        curve.AddValue(3, new Vec3(.6f, .9f, 0));
-		//        curve.AddValue(4, new Vec3(.3f, .5f, 0));
-		//        curve.AddValue(5, new Vec3(.9f, .6f, 0));
-		//        curve.AddValue(6, new Vec3(.9f, .4f, 0));
-		//        curve.AddValue(7, new Vec3(.2f, .5f, 0));
-		//        curve.AddValue(8, new Vec3(.1f, .9f, 0));
+		public static GuiRenderer.TriangleVertex[] GenerateTrianglesFromCurve(GuiRenderer renderer, Curve curve, float step, Vec2 thickness, ColorValue color)
+		{
+			float maxTime = curve.Times[curve.Times.Count - 1];
+			float end = maxTime + step;
 
-		//        DrawCurvePoints(renderer, curve, .01f, new ColorValue(0, 1, 0));
+			List<Vec2> points = new List<Vec2>();
+			for (float time = 0; time < end; time += step)
+			{
+				points.Add(curve.CalculateValueByTime(time).ToVec2());
+			}
 
-		//        GuiRenderer.TriangleVertex[] vertices = GenerateTrianglesFromCurve(renderer, curve, .05f, .006f, new ColorValue(0, 1, 0, .7f));
-		//        renderer.AddTriangles(vertices);
-		//    }
+			//Vec2 xHalf = new Vec2(thickness.X / 16, 0f);
+			//Vec2 yHalf = new Vec2(0f, thickness.Y / 16);
+			//float g = 1f;
+			//foreach (Vec2 point in points)
+			//{
+			//    renderer.AddQuad(new Rect(point - xHalf, point + yHalf), new ColorValue(1f, g, 0f));
+			//    g -= 0.05f;
+			//}
 
-		//    //draw red bezier curve
-		//    {
-		//        BezierCurve curve = new BezierCurve();
-		//        curve.AddValue(0, new Vec3(.1f, .2f, 0));
-		//        curve.AddValue(1, new Vec3(.2f, .7f, 0));
-		//        curve.AddValue(2, new Vec3(.9f, .1f, 0));
-		//        curve.AddValue(3, new Vec3(.9f, .9f, 0));
-
-		//        DrawCurvePoints(renderer, curve, .015f, new ColorValue(1, 0, 0));
-
-		//        GuiRenderer.TriangleVertex[] vertices = GenerateTrianglesFromCurve(
-		//            renderer, curve, .1f, .01f, new ColorValue(1, 0, 0, .7f));
-		//        renderer.AddTriangles(vertices);
-		//    }
-		//}
+			return GenerateTriangles(points, thickness, color);
+		}
 	}
 }

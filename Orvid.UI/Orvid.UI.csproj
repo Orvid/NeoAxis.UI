@@ -14,9 +14,9 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>False</Optimize>
     <OutputPath>..\..\Bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -24,17 +24,13 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>True</Optimize>
     <OutputPath>..\..\Bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EngineApp, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Bin\EngineApp.dll</HintPath>
-    </Reference>
     <Reference Include="MathEx">
       <HintPath>..\..\Bin\MathEx.dll</HintPath>
     </Reference>
@@ -46,6 +42,9 @@
     <Reference Include="UISystem">
       <HintPath>..\..\Bin\UISystem.dll</HintPath>
     </Reference>
+    <Reference Include="EngineApp">
+      <HintPath>..\..\Bin\EngineApp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdvancedEditBox.cs" />
@@ -55,4 +54,10 @@
     <Compile Include="StraightCurve.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Orvid.Utils\Orvid.Utils.csproj">
+      <Project>{076B3573-A113-452A-B412-A6FD86A3FA91}</Project>
+      <Name>Orvid.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
