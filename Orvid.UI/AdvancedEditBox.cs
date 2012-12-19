@@ -8,11 +8,20 @@ using Engine.UISystem;
 
 namespace Orvid.UI
 {
+	/// <summary>
+	/// This a more advanced form of the
+	/// basic EditBox control.
+	/// </summary>
 	public class AdvancedEditBox : BaseAdvancedControl
 	{
 		private bool mEnableMasking = false;
+		/// <summary>
+		/// If true, this causes all text entered to 
+		/// be masked before being displayed.
+		/// </summary>
 		[Serialize]
 		[Category("Masking")]
+		[DisplayName("Enable Masking")]
 		[Description("If true, this causes all text entered to be masked before being displayed.")]
 		[DefaultValue(false)]
 		public bool EnableMasking
@@ -22,8 +31,12 @@ namespace Orvid.UI
 		}
 
 		private char maskChar = '\u25CF'; // Black Circle
+		/// <summary>
+		/// The character to mask with if masking is enabled.
+		/// </summary>
 		[Serialize]
 		[Category("Masking")]
+		[DisplayName("Mask Character")]
 		[Description("The character to mask with if masking is enabled.")]
 		[DefaultValue('\u25CF')]
 		public char MaskCharacter
@@ -33,9 +46,13 @@ namespace Orvid.UI
 		}
 
 		private string realText = "";
+		/// <summary>
+		/// The current text in this EditBox. This will be the
+		/// unmasked text even if masking is enabled.
+		/// </summary>
 		[Serialize]
 		[Category("General")]
-		[Description("The current text in this EditBox. This will be the unmasked text if masking is enabled.")]
+		[Description("The current text in this EditBox. This will be the unmasked text even if masking is enabled.")]
 		[DefaultValue("")]
 		public override string Text
 		{
@@ -44,8 +61,13 @@ namespace Orvid.UI
 		}
 
 		private int mMaxCharacters = ushort.MaxValue;
+		/// <summary>
+		/// The maximum number of characters that can
+		/// be entered into this edit box.
+		/// </summary>
 		[Serialize]
 		[Category("General")]
+		[DisplayName("Display Name")]
 		[Description("The maximum number of characters that can be entered into this edit box.")]
 		[DefaultValue(ushort.MaxValue)]
 		public int MaxCharacters
@@ -55,8 +77,12 @@ namespace Orvid.UI
 		}
 
 		private bool mEnableMultilineInput = false;
+		/// <summary>
+		/// True if multi-line input should be enabled.
+		/// </summary>
 		[Serialize]
 		[Category("General")]
+		[DisplayName("Enable Multi-Line Input")]
 		[Description("True if multi-line input should be enabled.")]
 		[DefaultValue(false)]
 		public bool EnableMultilineInput
@@ -72,8 +98,13 @@ namespace Orvid.UI
 			TextVerticalAlign = VerticalAlign.Top,
 			WordWrap = true,
 		};
+		/// <summary>
+		/// The text to display when this control 
+		/// is empty and is not focused.
+		/// </summary>
 		[Serialize]
 		[Category("General")]
+		[DisplayName("Empty Text")]
 		[Description("The text to display when this control is empty and is not focused.")]
 		[Editor("Engine.UISystem.Editor.EControlTextEditor, UISystem.Editor", typeof(UITypeEditor))]
 		[DefaultValue("")]
@@ -83,8 +114,12 @@ namespace Orvid.UI
 			set { mEmptyText.Text = value; }
 		}
 
+		/// <summary>
+		/// The color of the EmptyText.
+		/// </summary>
 		[Serialize]
 		[Category("General")]
+		[DisplayName("Empty Text Color")]
 		[Description("The color of the EmptyText.")]
 		[DefaultValue(typeof(ColorValue), "255 255 255 192")]
 		public ColorValue EmptyTextColor
@@ -93,8 +128,12 @@ namespace Orvid.UI
 			set { mEmptyText.TextColor = value; }
 		}
 
+		/// <summary>
+		/// The font to use for the EmptyText.
+		/// </summary>
 		[Serialize]
 		[Category("General")]
+		[DisplayName("Empty Text Font")]
 		[Description("The font to use for the EmptyText.")]
 		[Editor("Engine.UISystem.Editor.ETextBoxFontEditor, UISystem.Editor", typeof(UITypeEditor))]
 		public Font EmptyTextFont
@@ -103,8 +142,12 @@ namespace Orvid.UI
 			set { mEmptyText.Font = value; }
 		}
 
+		/// <summary>
+		/// The horizontal align to use for the EmptyText.
+		/// </summary>
 		[Serialize]
 		[Category("Layout")]
+		[DisplayName("Empty Text Horizontal Align")]
 		[Description("The horizontal align to use for the EmptyText.")]
 		[DefaultValue(typeof(HorizontalAlign), "Left")]
 		public HorizontalAlign EmptyTextHorizontalAlign
@@ -113,8 +156,12 @@ namespace Orvid.UI
 			set { mEmptyText.TextHorizontalAlign = value; UpdateLabels(); }
 		}
 
+		/// <summary>
+		/// The vertical align to use for the EmptyText.
+		/// </summary>
 		[Serialize]
 		[Category("Layout")]
+		[DisplayName("Empty Text Vertical Align")]
 		[Description("The vertical align to use for the EmptyText.")]
 		[DefaultValue(typeof(VerticalAlign), "Top")]
 		public VerticalAlign EmptyTextVerticalAlign
@@ -139,8 +186,12 @@ namespace Orvid.UI
 			Color = new ColorValue(1f, 0f, 0f),
 			Visible = false,
 		};
+		/// <summary>
+		/// The color of the cursor.
+		/// </summary>
 		[Serialize]
 		[Category("Animation")]
+		[DisplayName("Cursor Color")]
 		[Description("The color of the cursor.")]
 		[DefaultValue(typeof(ColorValue), "255 255 255 255")]
 		public ColorValue CursorColor
@@ -150,8 +201,13 @@ namespace Orvid.UI
 		}
 
 		private bool mEnableCursorBlink = true;
+		/// <summary>
+		/// If this is true, a blinking cursor will be placed
+		/// after the text while the control is focused.
+		/// </summary>
 		[Serialize]
 		[Category("Animation")]
+		[DisplayName("Enable Cursor Blink")]
 		[Description("If this is true, a blinking cursor will be placed after the text while the control is focused.")]
 		[DefaultValue(true)]
 		public bool EnableCursorBlink
@@ -161,8 +217,12 @@ namespace Orvid.UI
 		}
 
 		private float mCursorBlinkRate = 500f;
+		/// <summary>
+		/// The number of milliseconds between toggling the cursor's visibility.
+		/// </summary>
 		[Serialize]
 		[Category("Animation")]
+		[DisplayName("Cursor Blink Rate")]
 		[Description("The number of milliseconds between the toggling of the cursor.")]
 		[DefaultValue(500f)]
 		public float CursorBlinkRate
@@ -178,8 +238,12 @@ namespace Orvid.UI
 			TextVerticalAlign = VerticalAlign.Top,
 			SupportLocalization = false,
 		};
+		/// <summary>
+		/// The color to use when displaying the user's text.
+		/// </summary>
 		[Serialize]
 		[Category("General")]
+		[DisplayName("Text Color")]
 		[Description("The color to use when displaying the user's text.")]
 		[DefaultValue(typeof(ColorValue), "255 255 255 255")]
 		public ColorValue TextColor
@@ -188,8 +252,13 @@ namespace Orvid.UI
 			set { mInnerText.TextColor = value; }
 		}
 
+		/// <summary>
+		/// The horizontal align to use for the text 
+		/// that the user enters.
+		/// </summary>
 		[Serialize]
 		[Category("Layout")]
+		[DisplayName("Text Horizontal Align")]
 		[Description("The horizontal align to use for the text that the user enters.")]
 		[DefaultValue(typeof(HorizontalAlign), "Left")]
 		public HorizontalAlign TextHorizontalAlign
@@ -198,8 +267,13 @@ namespace Orvid.UI
 			set { mInnerText.TextHorizontalAlign = value; UpdateLabels(); }
 		}
 
+		/// <summary>
+		/// The vertical align to use for the text 
+		/// that the user enters.
+		/// </summary>
 		[Serialize]
 		[Category("Layout")]
+		[DisplayName("Text Vertical Align")]
 		[Description("The vertical align to use for the text that the user enters.")]
 		[DefaultValue(typeof(VerticalAlign), "Top")]
 		public VerticalAlign TextVerticalAlign

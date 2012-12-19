@@ -9,10 +9,10 @@ namespace Orvid.Utils
 	{
 		public static Vec2 ScreenFromValue(this Control c, Control.ScaleValue val)
 		{
-			var oldPos = c.Position;
-			c.Position = val;
-			var ret = c.GetScreenPosition();
-			c.Position = oldPos;
+			var oldSz = c.Size;
+			c.Size = val;
+			var ret = c.GetScreenSize();
+			c.Size = oldSz;
 			return ret;
 		}
 	}

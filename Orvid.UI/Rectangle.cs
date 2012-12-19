@@ -1,4 +1,5 @@
-﻿using System;
+﻿//#define DebugDraw
+using System;
 using System.ComponentModel;
 using Engine.MathEx;
 using Engine.Renderer;
@@ -27,8 +28,12 @@ namespace Orvid.UI
 		}
 
 		private ScaleValue mBorderWidth = new ScaleValue(ScaleType.Pixel, Vec2.Zero);
+		/// <summary>
+		/// The width of the border.
+		/// </summary>
 		[Serialize]
 		[Category("General")]
+		[DisplayName("Border Width")]
 		[Description("The width of the border.")]
 		[DefaultValue(typeof(ScaleValue), "Pixel 0 0")]
 		public ScaleValue BorderWidth
@@ -38,8 +43,12 @@ namespace Orvid.UI
 		}
 
 		private ScaleValue mBorderRadius = new ScaleValue(ScaleType.Pixel, Vec2.Zero);
+		/// <summary>
+		/// The radius of the corners of the rectangle.
+		/// </summary>
 		[Serialize]
 		[Category("General")]
+		[DisplayName("Border Radius")]
 		[Description("The radius of the corners of the rectangle.")]
 		[DefaultValue(typeof(ScaleValue), "Pixel 0 0")]
 		public ScaleValue BorderRadius
@@ -49,8 +58,12 @@ namespace Orvid.UI
 		}
 
 		private ColorValue mBorderColor = new ColorValue(1f, 1f, 1f);
+		/// <summary>
+		/// The color of the border around the rectangle.
+		/// </summary>
 		[Serialize]
 		[Category("General")]
+		[DisplayName("Border Color")]
 		[Description("The color of the border around the rectangle.")]
 		[DefaultValue(typeof(ColorValue), "255 255 255")]
 		public ColorValue BorderColor
@@ -70,8 +83,10 @@ namespace Orvid.UI
 			r.Bottom = r.Top + sz.Y;
 			if (mBorderRadius.Value != Vec2.Zero)
 			{
+#if DebugDraw
 				ColorValue debugColor = new ColorValue(0f, 1f, 0f, .5f);
 				ColorValue debugColor2 = new ColorValue(0f, 0f, 1f, .5f);
+#endif
 
 				Vec2 screenRelRad = this.ScreenFromValue(mBorderRadius);
 
@@ -80,24 +95,39 @@ namespace Orvid.UI
 				// used in the color without it looking weird.
 
 				// Top-Left
+#if DebugDraw
+				renderer.AddCircle(r.LeftTop + screenRelRad, debugColor, screenRelRad, (float)Math.PI, (float)(Math.PI * 1.5f));
+#else
 				renderer.AddCircle(r.LeftTop + screenRelRad, mColor, screenRelRad, (float)Math.PI, (float)(Math.PI * 1.5f));
-				//renderer.AddCircle(r.LeftTop + screenRelRad, debugColor, screenRelRad, (float)Math.PI, (float)(Math.PI * 1.5f));
+#endif
 
 				// Top-Right
+#if DebugDraw
+				renderer.AddCircle(new Vec2(r.Right - screenRelRad.X, r.Top + screenRelRad.Y), debugColor, screenRelRad, (float)(Math.PI * 1.5f));
+#else
 				renderer.AddCircle(new Vec2(r.Right - screenRelRad.X, r.Top + screenRelRad.Y), mColor, screenRelRad, (float)(Math.PI * 1.5f));
-				//renderer.AddCircle(new Vec2(r.Right - screenRelRad.X, r.Top + screenRelRad.Y), debugColor, screenRelRad, (float)(Math.PI * 1.5f));
+#endif
 
 				// Bottom-Right
+#if DebugDraw
+				renderer.AddCircle(new Vec2(r.Right - screenRelRad.X, r.Bottom - screenRelRad.Y), debugColor, screenRelRad, 0f, (float)(Math.PI * 0.5f));
+#else
 				renderer.AddCircle(new Vec2(r.Right - screenRelRad.X, r.Bottom - screenRelRad.Y), mColor, screenRelRad, 0f, (float)(Math.PI * 0.5f));
-				//renderer.AddCircle(new Vec2(r.Right - screenRelRad.X, r.Bottom - screenRelRad.Y), debugColor, screenRelRad, 0f, (float)(Math.PI * 0.5f));
+#endif
 
 				// Bottom-Left
+#if DebugDraw
+				renderer.AddCircle(new Vec2(r.Left + screenRelRad.X, r.Bottom - screenRelRad.Y), debugColor, screenRelRad, (float)(Math.PI * 0.5), (float)Math.PI);
+#else
 				renderer.AddCircle(new Vec2(r.Left + screenRelRad.X, r.Bottom - screenRelRad.Y), mColor, screenRelRad, (float)(Math.PI * 0.5), (float)Math.PI);
-				//renderer.AddCircle(new Vec2(r.Left + screenRelRad.X, r.Bottom - screenRelRad.Y), debugColor, screenRelRad, (float)(Math.PI * 0.5), (float)Math.PI);
+#endif
 
 				// Middle-Middle
+#if DebugDraw
+				renderer.AddQuad(new Rect(r.Left, r.Top + screenRelRad.Y, r.Right, r.Bottom - screenRelRad.Y), debugColor2);
+#else
 				renderer.AddQuad(new Rect(r.Left, r.Top + screenRelRad.Y, r.Right, r.Bottom - screenRelRad.Y), mColor);
-				//renderer.AddQuad(new Rect(r.Left, r.Top + screenRelRad.Y, r.Right, r.Bottom - screenRelRad.Y), debugColor2);
+#endif
 				// Middle-Top
 				renderer.AddQuad(new Rect(r.Left + screenRelRad.X, r.Top, r.Right - screenRelRad.X, r.Top + screenRelRad.Y), mColor);
 				// Middle-Bottom

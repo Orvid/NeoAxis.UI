@@ -7,6 +7,7 @@
  * 
  */
 // Copyright (C) 2006-2012 NeoAxis Group Ltd.
+//#define DebugDraw
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -170,36 +171,6 @@ namespace Orvid.UI
 			return triangles;
 		}
 
-		public static void DrawCurvePoints(GuiRenderer renderer, Curve curve, float thickness, ColorValue color)
-		{
-			Vec2 thicknessXY = new Vec2(thickness / renderer.AspectRatio, thickness);
-
-			Vec2 halfThickness = thicknessXY * .5f;
-			foreach (Vec3 point in curve.Values)
-			{
-				renderer.AddQuad(new Rect(point.ToVec2() - halfThickness, point.ToVec2() + halfThickness), color);
-			}
-		}
-
-		public static GuiRenderer.TriangleVertex[] GenerateTrianglesFromCurve(GuiRenderer renderer, Curve curve, float step, float thickness, ColorValue color)
-		{
-			float maxTime = curve.Times[curve.Times.Count - 1];
-			float end = maxTime + step;
-
-			List<Vec2> points = new List<Vec2>();
-			for (float time = 0; time < end; time += step)
-			{
-				float t = time;
-				if (t > maxTime)
-					t = maxTime;
-				points.Add(curve.CalculateValueByTime(t).ToVec2());
-			}
-
-			Vec2 thicknessXY = new Vec2(thickness / renderer.AspectRatio, thickness);
-
-			return GenerateTriangles(points, thicknessXY, color);
-		}
-
 		public static GuiRenderer.TriangleVertex[] GenerateTrianglesFromCurve(GuiRenderer renderer, Curve curve, float step, Vec2 thickness, ColorValue color)
 		{
 			float maxTime = curve.Times[curve.Times.Count - 1];
@@ -211,14 +182,18 @@ namespace Orvid.UI
 				points.Add(curve.CalculateValueByTime(time).ToVec2());
 			}
 
-			//Vec2 xHalf = new Vec2(thickness.X / 16, 0f);
-			//Vec2 yHalf = new Vec2(0f, thickness.Y / 16);
-			//float g = 1f;
-			//foreach (Vec2 point in points)
-			//{
-			//    renderer.AddQuad(new Rect(point - xHalf, point + yHalf), new ColorValue(1f, g, 0f));
-			//    g -= 0.05f;
-			//}
+#if DebugDraw
+			Vec2 xHalf = new Vec2(thickness.X / 16, 0f);
+			Vec2 yHalf = new Vec2(0f, thickness.Y / 16);
+			float g = 1f;
+			// The green progression here is so we can tell which
+			// direction the curve was heading.
+			foreach (Vec2 point in points)
+			{
+				renderer.AddQuad(new Rect(point - xHalf, point + yHalf), new ColorValue(1f, g, 0f));
+				g -= 0.05f;
+			}
+#endif
 
 			return GenerateTriangles(points, thickness, color);
 		}
